@@ -1,13 +1,12 @@
 import { Module } from '@nestjs/common';
 
 import { AppService } from './app.service';
-import { ShatraService } from './modules/shatra/shatra.service';
-import { ShatraGateway } from './modules/shatra/shatra.gateway';
-import { GameRoomGateway } from './modules/room/room.gateway';
+import { RoomService } from './modules/room/room.service';
+import { RoomGateway } from './modules/room/room.gateway';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [AppService, ShatraService, ShatraGateway, GameRoomGateway],
+  providers: [AppService, RoomGateway, RoomService],
 })
 export class AppModule {}
