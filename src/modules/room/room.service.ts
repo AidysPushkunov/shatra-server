@@ -3,46 +3,49 @@ import { Socket } from 'socket.io';
 
 @Injectable()
 export class RoomService {
-  private rooms: Map<string, Set<string>> = new Map(); // Map<gameId, Set<playerId>>
+  private rooms: Map<string, Set<string>> = new Map();
   private sockets: Map<string, Socket> = new Map(); // Map<playerId, Socket>
 
   constructor() {}
 
   joinOrCreateGame(playerId: string, callback: (gameId: string) => void): void {
-    let gameId: string;
-
-    const availableGameId = Array.from(this.rooms.keys()).find((gameId) => {
-      const players = this.rooms.get(gameId);
-      return players && players.size === 1;
-    });
-
-    if (availableGameId) {
-      const players = this.rooms.get(availableGameId);
-      if (players) {
-        players.add(playerId);
-        gameId = availableGameId;
-      }
-    } else {
-      gameId = Math.random().toString(36).substr(2, 8);
-      this.rooms.set(gameId, new Set([playerId]));
-    }
-
     const socket = this.sockets.get(playerId);
+
     if (socket) {
+      const gameId = this.findOrCreateGame(playerId);
       callback(gameId);
     } else {
       console.error(`Socket not found for playerId: ${playerId}`);
     }
   }
 
-  getPlayersInGame(gameId: string): Set<string> | undefined {
-    return this.rooms.get(gameId);
+  private findOrCreateGame(playerId: string): string {
+    let gameId: string | undefined;
+
+    // Находим первую доступную игру или создаем новую
+    for (const [gameIdKey, players] of this.rooms.entries()) {
+      if (players.size === 1) {
+        gameId = gameIdKey;
+        players.add(playerId);
+        break;
+      }
+    }
+
+    if (!gameId) {
+      gameId = this.createGame(playerId);
+    }
+
+    return gameId;
   }
 
-  isPlayerInRoom(playerId: string, gameId: string): boolean {
-    const players = this.rooms.get(gameId);
-    console.log('isPlayerInRoom', players ? players.has(playerId) : false);
-    return players ? players.has(playerId) : false;
+  private createGame(playerId: string): string {
+    const gameId = Math.random().toString(36).substr(2, 8);
+    this.rooms.set(gameId, new Set([playerId]));
+    return gameId;
+  }
+
+  removePlayerSocket(playerId: string): void {
+    this.sockets.delete(playerId);
   }
 
   setPlayerSocket(playerId: string, socket: Socket): void {
@@ -53,7 +56,8 @@ export class RoomService {
     return this.sockets.get(playerId);
   }
 
-  removePlayerSocket(playerId: string): void {
-    this.sockets.delete(playerId);
+  isPlayerInRoom(playerId: string, gameId: string): boolean {
+    const players = this.rooms.get(gameId);
+    return !!players && players.has(playerId);
   }
 }
