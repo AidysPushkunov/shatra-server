@@ -1,12 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { Socket } from 'socket.io';
+import { Player } from './models';
 
 @Injectable()
 export class RoomService {
   private rooms: Map<string, Set<string>> = new Map();
   private sockets: Map<string, Socket> = new Map(); // Map<playerId, Socket>
+  private whitePlayer: Player | null = null;
+  private blackPlayer: Player | null = null;
 
   constructor() {}
+
+  setWhitePlayer(player: Player): void {
+    this.whitePlayer = player;
+  }
+
+  getWhitePlayer(): Player | null {
+    return this.whitePlayer;
+  }
+
+  setBlackPlayer(player: Player): void {
+    this.blackPlayer = player;
+  }
+
+  getBlackPlayer(): Player | null {
+    return this.blackPlayer;
+  }
 
   joinOrCreateGame(playerId: string, callback: (gameId: string) => void): void {
     const socket = this.sockets.get(playerId);
