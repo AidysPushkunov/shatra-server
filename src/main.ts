@@ -8,7 +8,7 @@ async function bootstrap() {
   // Настройка CORS
   app.use(
     cors({
-      origin: 'http://localhost:3000', // Разрешить запросы с этого origin
+      origin: 'https://shatra.vercel.app/', // Разрешить запросы с этого origin
       credentials: true, // Разрешить передачу учетных данных (cookies, авторизация)
     }),
   );
