@@ -13,6 +13,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(5000);
+  // Изменяем прослушиваемый порт на 80 и используем HTTP
+  await app.listen(80, '0.0.0.0'); // Прослушиваем все интерфейсы на порту 80
+
+  console.log('Application is running on: http://45.147.179.12:80');
 }
 bootstrap();
