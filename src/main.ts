@@ -1,9 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as cors from 'cors';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    httpsOptions: {
+      key: fs.readFileSync('/etc/letsencrypt/live/shatra.ru/privkey.pem'),
+      cert: fs.readFileSync('/etc/letsencrypt/live/shatra.ru/fullchain.pem'),
+    },
+  });
 
   // Настройка CORS
   app.use(
@@ -13,9 +19,9 @@ async function bootstrap() {
     }),
   );
 
-  // Изменяем прослушиваемый порт на 80 и используем HTTP
-  await app.listen(80, '0.0.0.0'); // Прослушиваем все интерфейсы на порту 80
+  await app.listen(443);
 
-  console.log('Application is running on: http://45.147.179.12:80');
+  console.log('Application is running on: https://shatra.ru');
 }
+
 bootstrap();
