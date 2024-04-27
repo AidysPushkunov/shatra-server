@@ -26,11 +26,32 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+# Altai Shatra Game Server
+
+Welcome to the Altai Shatra game server! This server-side application is the backend for the Altai Shatra game, primarily handling real-time gameplay logic through websockets.
+
+## Overview
+
+The Altai Shatra game is a multiplayer board game played in real-time. This server application is responsible for managing game sessions, handling player interactions, and facilitating real-time communication between players.
+
+## Technologies Used
+
+- **Nest.js**: A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+- **Websockets**: Real-time communication protocol used for bi-directional communication between clients and the server.
+- **TypeScript**: A typed superset of JavaScript that compiles to plain JavaScript, providing better tooling and code clarity.
+
+## Installation
+
+1. Clone the repository:
+
+````bash
+git clone https://github.com/your-username/altai-shatra-server.git
+
 ## Installation
 
 ```bash
 $ npm install
-```
+````
 
 ## Running the app
 
@@ -71,5 +92,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
 # shatra-server
+
 # shatra-server
